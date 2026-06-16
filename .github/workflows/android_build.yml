@@ -16,40 +16,49 @@ jobs:
     - name: Installer Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: 18
 
-    - name: Installer Java (JDK 17)
+    - name: Installer Java (JDK 11 - Requis pour Cordova)
       uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
-        java-version: '17'
+        distribution: 'zulu'
+        java-version: '11'
 
-    - name: Installer Bubblewrap CLI
-      run: npm install -g @bubblewrap/cli
+    - name: Configurer Android SDK
+      uses: android-actions/setup-android@v3
 
-    - name: Pré-configurer Bubblewrap (Acceptation automatique des licences)
+    - name: Installer Cordova
+      run: npm install -g cordova
+
+    - name: Créer le projet Android Cordova
       run: |
-        mkdir -p ~/.bubblewrap
-        echo '{"jdkPath":"/usr/lib/jvm/temurin-17-jdk-amd64","androidSdkPath":"/usr/local/lib/android/sdk"}' > ~/.bubblewrap/config.json
+        # Crée la structure de l'application
+        cordova create mon_projet com.fermesabidjanaise.ventevolaillepro "Volaille Pro"
+        cd mon_projet
+        
+        # Ajoute la plateforme Android
+        cordova platform add android
+        
+        # Copie ton fichier index.html dans le dossier de l'application
+        cp ../index.html www/index.html
+        
+        # Ajuste la configuration pour intégrer ton logo comme icône officielle
+        echo '<widget id="com.fermesabidjanaise.ventevolaillepro" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">' > config.xml
+        echo '    <name>Volaille Pro</name>' >> config.xml
+        echo '    <description>Application de gestion avicole</description>' >> config.xml
+        echo '    <author email="contact@fermesabidjanaise.com">Gilles Brice</author>' >> config.xml
+        echo '    <content src="index.html" />' >> config.xml
+        echo '    <preference name="AllowInlineMediaPlayback" value="true" />' >> config.xml
+        echo '    <icon src="https://i.postimg.cc/mD3w5n4L/1000372233.png" />' >> config.xml
+        echo '</widget>' >> config.xml
 
-    - name: Générer le projet Android et l'APK
+    - name: Compiler l'APK
       run: |
-        # Initialise le projet Bubblewrap
-        bubblewrap init --manifest twa-manifest.json --metaOut dir --yes
-        
-        # Génère une clé de signature temporaire obligatoire pour créer un APK installable
-        keytool -genkeypair -v -keystore android.keystore -alias androidkey -keyalg RSA -keysize 2048 -validity 10000 -storepass vpro2026 -keypass vpro2026 -dname "CN=Gilles, O=FermesAbidjanaise, C=CI"
-        
-        # Crée un fichier de configuration pour que Bubblewrap sache où trouver la clé
-        echo '{"keypath":"./android.keystore","alias":"androidkey"}' > twa-env.json
-        
-        # Lance la compilation finale de l'APK
-        export BUBBLEWRAP_KEYSTORE_PASSWORD=vpro2026
-        export BUBBLEWRAP_KEY_PASSWORD=vpro2026
-        bubblewrap build --signingKeyPath ./android.keystore --signingKeyAlias androidkey --gplayRelease false
-        
+        cd mon_projet
+        cordova build android --device --debug
+
     - name: Sauvegarder l'application installable (APK)
       uses: actions/upload-artifact@v4
       with:
         name: Vente-Volaille-Pro-Android-APK
-        path: ./*.apk
+        path: mon_projet/platforms/android/app/build/outputs/apk/debug/app-debug.apk
