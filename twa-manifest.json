@@ -1,31 +1,15 @@
 {
-  "packageId": "com.fermesabidjanaise.ventevolaillepro",
-  "host": "script.google.com",
   "name": "VENTE DE VOLAILLE PRO",
-  "shortName": "Volaille Pro",
-  "themeColor": "#1E3A8A",
-  "navigationColor": "#1E3A8A",
-  "backgroundColor": "#FFFFFF",
-  "startUrl": "/macros/s/AKfycbyMTdMmKNvYbmRvgTt0-wHb9tMt4Zi5THexnPT-e-z4UApoc0AYUYJT7VI5SvSaAvI/exec",
+  "short_name": "Volaille Pro",
+  "start_url": "https://script.google.com/macros/s/AKfycbyMTdMmKNvYbmRvgTt0-wHb9tMt4Zi5THexnPT-e-z4UApoc0AYUYJT7VI5SvSaAvI/exec",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
   "icons": [
-  {
-    "src": "https://postimg.cc/q6Qp27w3",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
-
-  "maskableIconUrl": "https://i.postimg.cc/mD3w5n4L/1000372233.png",
-  "clockwiseRotation": false,
-  "features": {
-    "locationDelegation": true
-  },
-  "alphaDependencies": {
-    "enabled": false
-  },
-  "enableNotifications": false,
-  "webManifestUrl": "https://script.google.com/macros/s/AKfycbyMTdMmKNvYbmRvgTt0-wHb9tMt4Zi5THexnPT-e-z4UApoc0AYUYJT7VI5SvSaAvI/exec?file=manifest",
-  "orientation": "default",
-  "fingerprints": [],
-  "additionalTrustedOrigins": []
+    {
+      "src": "https://raw.githubusercontent.com/agibrico/vente-volaille-pro-android/main/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
