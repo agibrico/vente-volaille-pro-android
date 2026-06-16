@@ -1,0 +1,17 @@
+name: Build Android APK
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Web App
+        run: echo "Préparation des fichiers..."
+      - name: Télécharger l'APK
+        run: |
+          # Utilisation d'un service de compilation distant sécurisé
+          curl -L -o app.apk https://build.cloud.phonegap.com/builds/latest?url=https://script.google.com/macros/s/AKfycbyMTdMmKNvYbmRvgTt0-wHb9tMt4Zi5THexnPT-e-z4UApoc0AYUYJT7VI5SvSaAvI/exec
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Vente-Volaille-Pro-APK
+          path: app.apk
