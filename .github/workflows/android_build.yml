@@ -1,0 +1,41 @@
+name: Compiler l'application Android (APK)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Permet de lancer la compilation manuellement d'un simple clic
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Récupérer le code du dépôt
+      uses: actions/checkout@v4
+
+    - name: Installer Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-size: 20
+
+    - name: Installer Java (Requis pour compiler du Android)
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Installer Bubblewrap CLI (Outil Google PWA)
+      run: npm install -g @bubblewrap/cli
+
+    - name: Générer le projet Android et l'APK
+      run: |
+        # Initialise le projet sans poser de questions en utilisant notre fichier json
+        bubblewrap init --manifest twa-manifest.json --metaOut dir
+        # Compile l'application en mode Release/Signé
+        bubblewrap build --signingKeyPath none
+        
+    - name: Sauvegarder l'application installable (APK)
+      uses: actions/upload-artifact@v4
+      with:
+        name: Vente-Volaille-Pro-Android-APK
+        path: ./*.apk
