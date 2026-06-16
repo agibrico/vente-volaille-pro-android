@@ -7,7 +7,14 @@
   "navigationColor": "#1E3A8A",
   "backgroundColor": "#FFFFFF",
   "startUrl": "/macros/s/AKfycbyMTdMmKNvYbmRvgTt0-wHb9tMt4Zi5THexnPT-e-z4UApoc0AYUYJT7VI5SvSaAvI/exec",
-  "iconUrl": "https://i.postimg.cc/mD3w5n4L/1000372233.png",
+  "icons": [
+  {
+    "src": "https://TON_LIEN_ICI/ton_logo.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
+
   "maskableIconUrl": "https://i.postimg.cc/mD3w5n4L/1000372233.png",
   "clockwiseRotation": false,
   "features": {
