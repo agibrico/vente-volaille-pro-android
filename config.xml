@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget id="com.fermesabidjanaise.ventevolaillepro" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    
+    <name>Volaille Pro</name>
+    <description>Application de gestion et de vente avicole</description>
+    <author email="contact@fermesabidjanaise.com">Gilles Brice</author>
+
+    <content src="https://script.google.com/macros/s/AKfycbyMTdMmKNvYbmRvgTt0-wHb9tMt4Zi5THexnPT-e-z4UApoc0AYUYJT7VI5SvSaAvI/exec" />
+
+    <preference name="Orientation" value="portrait" />
+    <preference name="Fullscreen" value="false" />
+    <preference name="BackgroundColor" value="#001E3A8A" />
+    <preference name="AndroidXEnabled" value="true" />
+
+    <icon src="icon.png" />
+
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-navigation href="*" />
+</widget>
