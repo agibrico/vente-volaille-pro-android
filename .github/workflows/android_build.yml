@@ -13,52 +13,23 @@ jobs:
     - name: Récupérer le code du dépôt
       uses: actions/checkout@v4
 
-    - name: Installer Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
+    - name: Compresser les fichiers pour VoltBuilder
+      run: zip -r project.zip config.xml icon.png
 
-    - name: Installer Java (JDK 11 - Requis pour Cordova)
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'zulu'
-        java-version: '11'
-
-    - name: Configurer Android SDK
-      uses: android-actions/setup-android@v3
-
-    - name: Installer Cordova
-      run: npm install -g cordova
-
-    - name: Créer le projet Android Cordova
+    - name: Envoyer à VoltBuilder et Compiler l'APK
+      id: voltbuilder
       run: |
-        # Crée la structure de l'application
-        cordova create mon_projet com.fermesabidjanaise.ventevolaillepro "Volaille Pro"
-        cd mon_projet
+        # Appel à l'API de compilation VoltBuilder
+        RESPONSE=$(curl -s -X POST https://api.voltbuilder.com/v1/builds \
+          -F "app=@project.zip" \
+          -F "platform=android")
         
-        # Ajoute la plateforme Android
-        cordova platform add android
-        
-        # Copie ton fichier index.html dans le dossier de l'application
-        cp ../index.html www/index.html
-        
-        # Ajuste la configuration pour intégrer ton logo comme icône officielle
-        echo '<widget id="com.fermesabidjanaise.ventevolaillepro" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">' > config.xml
-        echo '    <name>Volaille Pro</name>' >> config.xml
-        echo '    <description>Application de gestion avicole</description>' >> config.xml
-        echo '    <author email="contact@fermesabidjanaise.com">Gilles Brice</author>' >> config.xml
-        echo '    <content src="index.html" />' >> config.xml
-        echo '    <preference name="AllowInlineMediaPlayback" value="true" />' >> config.xml
-        echo '    <icon src="https://i.postimg.cc/mD3w5n4L/1000372233.png" />' >> config.xml
-        echo '</widget>' >> config.xml
+        # Récupération du lien de téléchargement de l'APK
+        DOWNLOAD_URL=$(echo $RESPONSE | grep -o '"downloadURL":"[^"]*' | grep -o '[^"]*$')
+        echo "DOWNLOAD_URL=$DOWNLOAD_URL" >> $GITHUB_ENV
+        echo "APK généré avec succès !"
 
-    - name: Compiler l'APK
+    - name: Sauvegarder le lien de l'application (APK)
       run: |
-        cd mon_projet
-        cordova build android --device --debug
-
-    - name: Sauvegarder l'application installable (APK)
-      uses: actions/upload-artifact@v4
-      with:
-        name: Vente-Volaille-Pro-Android-APK
-        path: mon_projet/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        echo "Félicitations ! Ton APK est prêt."
+        echo "Tu peux le télécharger directement ici : ${{ env.DOWNLOAD_URL }}"
